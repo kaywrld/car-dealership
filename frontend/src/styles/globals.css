@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* ── Brand blue scale (anchored to #0045a0) ── */
+  --brand:     #0045a0;   /* PRIMARY — the exact blue from the logo */
+  --brand-mid: #0052c2;   /* slightly brighter for hovers */
+  --brand-lit: #1a6fd4;   /* highlights & button gradients */
+  --brand-glow:#3b82f6;   /* glow shadows & accents */
+
+  /* ── Dark backgrounds ── */
+  --bg-deep:   #020c1e;   /* page body */
+  --bg-dark:   #03102a;   /* footer / header resting */
+  --bg-card:   #041435;   /* cards, drawers */
+
+  /* ── Legacy aliases (keep for existing Tailwind classes) ── */
+  --blue-950:  #020c1e;
+  --blue-900:  #03102a;
+  --blue-800:  #041435;
+  --blue-700:  #0a2a5e;
+  --blue-600:  #0045a0;   /* = --brand */
+  --blue-500:  #0052c2;
+  --blue-400:  #1a6fd4;
+  --blue-300:  #7ab4f0;
+  --blue-100:  #d0e6fa;
+
+  --gold:      #e8b84b;
+  --white:     #f4f8ff;
+  --muted:     #6a82a8;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    /* background-color: #020c1e;
+    background-image: url('/src/assets/background.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; */
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+  }
+  
+  @media (max-width: 768px) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
+::selection {
+  background: var(--brand);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb {
+  background: var(--brand);
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+    .hero-bg {
+      background-attachment: scroll !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
