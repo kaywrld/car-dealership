@@ -45,7 +45,7 @@ export default function CarsForHire({ filterMake = '' }) {
     </p>
   )
   if (!cars.length) return (
-    <p style={{ fontFamily: "'Barlow', sans-serif", color: '#6080b0', fontSize: 14, padding: '40px 0' }}>
+    <p style={{ fontFamily: "'Barlow', sans-serif", color: '#FFFF', fontSize: 14, padding: '40px 0' }}>
       No hire cars available right now.
     </p>
   )
