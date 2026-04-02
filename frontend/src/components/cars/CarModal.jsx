@@ -20,8 +20,10 @@ function WhatsAppIcon({ size = 16 }) {
 export default function CarModal({ car, onClose, onShowMore, isHire = false }) {
   // Multi-image support
   const photos = Array.isArray(car.images) && car.images.length > 0
-    ? car.images
-    : car.image ? [car.image] : []
+  ? car.images
+  : car.image_url ? [car.image_url]
+  : car.image     ? [car.image]
+  : []
 
   const [photoIdx, setPhotoIdx] = useState(0)
   const [fading, setFading]     = useState(false)
@@ -99,17 +101,17 @@ export default function CarModal({ car, onClose, onShowMore, isHire = false }) {
   ]
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/cars/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/cars?type=${car.type}`)
       .then(r => r.json())
       .then(all => {
         const range = all.filter(c =>
           c.id !== car.id &&
-          Math.abs(Number(c.price) - Number(car.price)) <= 1000
+          Math.abs(Number(c.price) - Number(car.price)) <= 5000
         )
-        setSimilarCars(range)
+        setSimilarCars(range.slice(0, 3))
       })
       .catch(console.error)
-  }, [car.id, car.price])
+  }, [car.id, car.price, car.type])
 
   return (
     <div
@@ -269,7 +271,7 @@ export default function CarModal({ car, onClose, onShowMore, isHire = false }) {
         <div style={{ padding: '20px 24px 28px', background: '#0d0d0d' }}>
 
           {/* Location / Engine / Hybrid strip */}
-          {(car.city || car.engineSize || car.isHybrid) && (
+          {(car.city || car.engine_size || car.engineSize || car.is_hybrid || car.isHybrid) && (
             <div style={{
               display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 18,
               padding: '10px 14px',
