@@ -13,6 +13,8 @@ const panelWrap = {
   overflow: 'hidden',
 }
 
+const API = import.meta.env.VITE_API_URL
+
 const PanelHeader = ({ title, subtitle }) => (
   <div style={{
     background: 'linear-gradient(135deg, #001a5e 0%, #0045a0 55%, #002f70 100%)',
@@ -67,7 +69,7 @@ export default function EditCar() {
   }, [dealer])
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/cars/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/cars/${id}`)
       .then(r => r.json())
       .then(car => {
         setForm({

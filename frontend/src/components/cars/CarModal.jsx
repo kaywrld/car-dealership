@@ -99,7 +99,7 @@ export default function CarModal({ car, onClose, onShowMore, isHire = false }) {
   ]
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cars')
+    fetch(`${import.meta.env.VITE_API_URL}/api/cars/${id}`)
       .then(r => r.json())
       .then(all => {
         const range = all.filter(c =>
