@@ -89,7 +89,7 @@ export default function Home() {
       backgroundImage: `url(${bgImage})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundAttachment: 'fixed',
+      backgroundAttachment: 'scroll',
       fontFamily: "'Barlow', sans-serif"
     }}>
       <style>{`
@@ -260,6 +260,16 @@ export default function Home() {
           }
           .listings-content { padding-left: 12px !important; padding-right: 12px !important; }
         }
+        /* ── Hero responsive fixes ── */
+        @media (max-width: 480px) {
+          .hero-title-main { font-size: 28px !important; }
+          .stat-card { padding: 10px 14px !important; }
+          .cta-primary, .cta-outline { font-size: 11px !important; padding: 9px 18px !important; }
+        }
+
+        @media (max-height: 700px) and (orientation: landscape) {
+          .scroll-hint { display: none !important; }
+        }
       `}</style>
 
       {/* ── Hero ── */}
@@ -288,7 +298,7 @@ export default function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-start text-center" style={{ zIndex: 10, padding: '130px 24px 0' }}>
+        <div className="absolute inset-0 flex flex-col items-center justify-start text-center" style={{ zIndex: 10, padding: 'clamp(90px, 15vh, 150px) 24px 0' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
             <div style={{ width: 32, height: 2, background: '#0045a0', borderRadius: 2 }} />
             <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.26em', textTransform: 'uppercase', color: '#6fa3e8' }}>
@@ -320,14 +330,6 @@ export default function Home() {
               Cars for Hire
             </button>
           </div>
-          <div style={{ display: 'flex', gap: 10, marginTop: 28, flexWrap: 'nowrap', justifyContent: 'center' }}>
-            {[{ value: '100+', label: 'Vehicles Available' }, { value: '4 Yrs', label: 'In Business' }, { value: '4.9★', label: 'Customer Rating' }].map(stat => (
-              <div className="stat-card" key={stat.label}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: '#fff', letterSpacing: '-0.01em' }}>{stat.value}</div>
-                <div style={{ fontFamily: "'Barlow', sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#6fa3e8', marginTop: 2 }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div style={{ position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 8, zIndex: 20 }}>
@@ -350,7 +352,7 @@ export default function Home() {
           margin: '0 auto',
           paddingLeft: 'clamp(0px, 2vw, 32px)',
           paddingRight: 'clamp(0px, 2vw, 32px)',
-          paddingTop: 0,
+          paddingTop: 'clamp(16px, 4vw, 40px)',
           paddingBottom: 80,
         }}
       >

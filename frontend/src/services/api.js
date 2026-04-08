@@ -1,5 +1,11 @@
 const BASE = `${import.meta.env.VITE_API_URL}/api`
 
+export const QUERY_KEYS = {
+  carsSale: ['cars', 'sale'],
+  carsHire: ['cars', 'hire'],
+  carById:  (id) => ['cars', id],
+}
+
 function getToken() {
   return localStorage.getItem('ae_token')
 }

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { Upload, PlusCircle, X, ImagePlus, FolderOpen } from 'lucide-react'
 import bgImage from '../../assets/background.jpg'
-import { createCar } from '../../services/api'
+import { useQueryClient } from '@tanstack/react-query'
+import { createCar, QUERY_KEYS } from '../../services/api'
 
 const FIELD = (id, label, type = 'text', placeholder = '', opts = null) => ({ id, label, type, placeholder, opts })
 
@@ -53,6 +54,7 @@ const PanelHeader = ({ title, subtitle }) => (
 export default function AddCar() {
   const { dealer } = useAuth()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [form, setForm] = useState({
     make: '', model: '', year: '', price: '', mileage: '',
@@ -100,37 +102,33 @@ export default function AddCar() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-
+  
     if (images.length === 0) {
       setError('Please add at least one photo.')
       return
     }
-
+  
     setSubmitting(true)
     try {
       const imageUrls = images.map(img => img.src)
-
-      // Send BOTH snake_case and camelCase versions so the DB and card
-      // can read whichever column name it stores/expects
+  
       await createCar({
         ...form,
-        year:         Number(form.year),
-        price:        Number(form.price),
-        mileage:      Number(form.mileage),
-        // Hybrid — send both formats
-        is_hybrid:    form.isHybrid === 'Yes',
-        isHybrid:     form.isHybrid,
-        // Engine size — send both formats
-        engine_size:  form.engineSize,
-        // City is already 'city' from the form field id
-        // Images — primary + full array (JSON-stringified for DB compat)
-        image_url:    imageUrls[0],
-        images:       imageUrls,               // array for APIs that accept arrays
-        images_json:  JSON.stringify(imageUrls), // stringified for DBs that store as text
-        // Features
-        features: form.features.filter(f => f.trim() !== ''),
+        year:        Number(form.year),
+        price:       Number(form.price),
+        mileage:     Number(form.mileage),
+        is_hybrid:   form.isHybrid === 'Yes',
+        isHybrid:    form.isHybrid,
+        engine_size: form.engineSize,
+        image_url:   imageUrls[0],
+        images:      imageUrls,
+        features:    form.features.filter(f => f.trim() !== ''),
       })
-
+  
+      // ← Bust the cache so home page shows the new car immediately
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.carsSale })
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.carsHire })
+  
       navigate('/')
     } catch (err) {
       setError(err.message || 'Failed to publish listing.')
