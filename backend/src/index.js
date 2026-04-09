@@ -11,10 +11,10 @@ const PORT = process.env.PORT || 5000
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://www.online.pacecollege.co.zw',   // ← replace with your real cPanel domain
-  'https://online.pacecollege.co.zw',
-  'http://www.online.pacecollege.co.zw',   // ← replace with your real cPanel domain
-  'http://online.pacecollege.co.zw',
+  'https://www.beecars.co.zw',   // ← replace with your real cPanel domain
+  'https://beecars.co.zw',
+  'http://www.beecars.co.zw',   // ← replace with your real cPanel domain
+  'http://beecars.co.zw',
 ]
 
 app.use(cors({

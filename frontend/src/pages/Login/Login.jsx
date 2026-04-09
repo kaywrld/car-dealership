@@ -199,7 +199,7 @@ export default function Login() {
                 type="email"
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="admin@beecars.com"
+                placeholder="email/username"
                 required
               />
             </div>
