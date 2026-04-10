@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import CarCard from './CarCard'
 
 // ── Configure your dealership contact details here ──────────────────────────
-const DEALER_WHATSAPP = '263771234567'   // Zimbabwe number, no + or spaces
-const DEALER_PHONE    = '+263771234567'
-const DEALER_EMAIL    = 'sales@beecars.co.zw'
+const DEALER_WHATSAPP = '263772529318'   // Zimbabwe number, no + or spaces
+const DEALER_PHONE    = '+263772529318'
+const DEALER_EMAIL    = 'beemapsy@gmail.com'
 // ────────────────────────────────────────────────────────────────────────────
 
 // WhatsApp SVG icon (official brand mark)

@@ -1,85 +1,68 @@
-const CACHE = 'beecars-v1'
+const CACHE = 'beecars-v2'  // bumped version forces old SW out
 
-const PRECACHE = [
-  '/',
-  '/index.html',
-]
-
-// Install — cache core files
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(PRECACHE))
+    caches.open(CACHE)
+      .then(cache => cache.addAll(['/', '/index.html']))
+      .then(() => self.skipWaiting())
   )
-  self.skipWaiting()
 })
 
-// Activate — clean old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
   )
-  self.clients.claim()
 })
 
-// Fetch strategy:
-// - JS/CSS/fonts/images → Cache First (serve from cache, update in background)
-// - API calls → Network First (always try network, fall back to cache)
-// - HTML → Network First (always get fresh HTML)
 self.addEventListener('fetch', e => {
   const { request } = e
   const url = new URL(request.url)
 
-  // Skip non-GET and chrome-extension requests
+  // Only handle GET over http/https
   if (request.method !== 'GET') return
-  if (url.protocol === 'chrome-extension:') return
+  if (!url.protocol.startsWith('http')) return
 
-  // API calls — network first
-  if (url.pathname.startsWith('/api') || url.hostname.includes('onrender.com')) {
-    e.respondWith(
-      fetch(request)
-        .then(res => {
-          const clone = res.clone()
-          caches.open(CACHE).then(c => c.put(request, clone))
-          return res
-        })
-        .catch(() => caches.match(request))
-    )
-    return
+  // API / Render — network only, no caching (React Query handles this)
+  if (
+    url.hostname.includes('onrender.com') ||
+    url.pathname.startsWith('/api')
+  ) {
+    return  // let browser handle it normally
   }
 
-  // Static assets (JS, CSS, images, fonts) — cache first
-  if (
-    url.pathname.match(/\.(js|css|woff2?|png|jpg|jpeg|webp|svg|ico)$/)
-  ) {
+  // Static hashed assets (Vite outputs filename hashes) — cache forever
+  if (url.pathname.match(/\/assets\/.+\.(js|css|woff2?|png|jpg|jpeg|webp|svg|ico)$/)) {
     e.respondWith(
       caches.match(request).then(cached => {
-        if (cached) {
-          // Update cache in background
-          fetch(request).then(res => {
-            caches.open(CACHE).then(c => c.put(request, res))
-          }).catch(() => {})
-          return cached
-        }
-        return fetch(request).then(res => {
-          caches.open(CACHE).then(c => c.put(request, res.clone()))
-          return res
+        if (cached) return cached
+        return fetch(request).then(response => {
+          if (!response || response.status !== 200 || response.type === 'opaque') {
+            return response
+          }
+          const copy = response.clone()
+          caches.open(CACHE).then(c => c.put(request, copy))
+          return response
         })
       })
     )
     return
   }
 
-  // HTML / navigation — network first, fall back to index.html
+  // Everything else (HTML, navigation) — network first, fall back to index.html
   e.respondWith(
     fetch(request)
-      .then(res => {
-        caches.open(CACHE).then(c => c.put(request, res.clone()))
-        return res
+      .then(response => {
+        if (!response || response.status !== 200 || response.type === 'opaque') {
+          return response
+        }
+        const copy = response.clone()
+        caches.open(CACHE).then(c => c.put(request, copy))
+        return response
       })
-      .catch(() =>
-        caches.match('/index.html')
-      )
+      .catch(() => caches.match('/index.html'))
   )
 })

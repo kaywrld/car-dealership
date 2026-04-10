@@ -362,15 +362,15 @@ export default function Footer() {
               <ul className="bc-footer-contact">
                 <li>
                   <div className="bc-contact-icon"><Phone size={13} color="rgba(255,255,255,0.8)" /></div>
-                  +263 778 957 803
+                  +263 772 529 318
                 </li>
                 <li>
                   <div className="bc-contact-icon"><Mail size={13} color="rgba(255,255,255,0.8)" /></div>
-                  info@beecars.com
+                  beemapsy@gmail.com
                 </li>
                 <li>
                   <div className="bc-contact-icon"><MapPin size={13} color="rgba(255,255,255,0.8)" /></div>
-                  123 Cnr Robert Mugabe and Grenara
+                  Lot D railway siding Cnr Robert Mugabe and Grenara
                 </li>
               </ul>
             </div>

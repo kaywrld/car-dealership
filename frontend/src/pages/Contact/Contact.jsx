@@ -39,9 +39,9 @@ export default function Contact() {
   }
 
   const infoItems = [
-    { Icon: Phone, label: 'Phone', main: '+263 778 957 803', sub: 'Mon–Sat, 8am–7pm' },
-    { Icon: Mail, label: 'Email', main: 'info@beecars.co.zw', sub: 'We reply within 2 hours' },
-    { Icon: MapPin, label: 'Visit Us', main: 'Cnr Robert Mugabe and Grenara', sub: 'Open by in stated hours' },
+    { Icon: Phone, label: 'Phone', main: '+263 772 529 318/ +263 716 555 555', sub: 'Mon–Sat, 8am–7pm' },
+    { Icon: Mail, label: 'Email', main: 'beemapsy@gmail.com / inquiries@beecars.co.zw', sub: 'We reply within 2 hours' },
+    { Icon: MapPin, label: 'Visit Us', main: 'Lot D railway siding, Cnr Robert Mugabe and Grenara', sub: 'Open by in stated hours' },
     { Icon: Clock, label: 'Hours', main: 'Mon–Sat: 8am – 7pm', sub: 'Sunday: 10am – 4pm' },
   ]
 
