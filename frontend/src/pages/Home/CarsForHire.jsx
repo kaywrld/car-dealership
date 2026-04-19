@@ -34,7 +34,7 @@ export default function CarsForHire({ filterMake = '' }) {
     : cars
 
   if (isLoading) return (
-    <div style={{ textAlign: 'center', padding: '60px 0', fontFamily: "'Barlow', sans-serif", color: '#6080b0', fontSize: 14 }}>
+    <div style={{ textAlign: 'center', padding: '60px 0', fontFamily: "'Barlow', sans-serif", color: '#FFFFFF', fontSize: 14 }}>
       Loading vehicles...
     </div>
   )

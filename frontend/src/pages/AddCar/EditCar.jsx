@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { updateCar } from '../../services/api'
 import { Upload, PlusCircle, X, ImagePlus, FolderOpen, CheckCircle, XCircle } from 'lucide-react'
 import bgImage from '../../assets/background.jpg'
+import { updateCar, uploadImage } from '../../services/api'
 
 const panelWrap = {
   background: 'rgba(0, 15, 55, 0.60)',
@@ -146,7 +146,16 @@ export default function EditCar() {
     setError('')
     setSubmitting(true)
     try {
-      const imageUrls = images.map(img => img.src)
+      // Upload any new local files first
+      const imageUrls = await Promise.all(
+        images.map(async (img) => {
+          if (img.isLocal) {
+            return await uploadImage(img.src, img.name)
+          }
+          return img.src
+        })
+      )
+
       await updateCar(id, {
         ...form,
         year:        Number(form.year),

@@ -70,6 +70,18 @@ export async function deleteCar(id) {
   return data
 }
 
+// ── Image Upload ─────────────────────────────────────────
+export async function uploadImage(base64, filename) {
+  const res = await fetch(`${BASE}/upload`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ base64, filename }),
+  })
+  const data = await res.json()
+  if (!res.ok) throw new Error(data.error)
+  return data.url  // returns the public https:// URL
+}
+
 export async function fetchMakes() {
     const res = await fetch(`${BASE}/cars/makes`)
     const data = await res.json()

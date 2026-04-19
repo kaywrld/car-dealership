@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import { Upload, PlusCircle, X, ImagePlus, FolderOpen } from 'lucide-react'
 import bgImage from '../../assets/background.jpg'
 import { useQueryClient } from '@tanstack/react-query'
-import { createCar, QUERY_KEYS } from '../../services/api'
+import { createCar, uploadImage, QUERY_KEYS } from '../../services/api'
 
 const FIELD = (id, label, type = 'text', placeholder = '', opts = null) => ({ id, label, type, placeholder, opts })
 
@@ -110,7 +110,15 @@ export default function AddCar() {
   
     setSubmitting(true)
     try {
-      const imageUrls = images.map(img => img.src)
+      // Upload local files first, get back URLs
+      const imageUrls = await Promise.all(
+        images.map(async (img) => {
+          if (img.isLocal) {
+            return await uploadImage(img.src, img.name)  // ← upload, get URL back
+          }
+          return img.src  // already a URL
+        })
+      )
   
       await createCar({
         ...form,
@@ -118,17 +126,14 @@ export default function AddCar() {
         price:       Number(form.price),
         mileage:     Number(form.mileage),
         is_hybrid:   form.isHybrid === 'Yes',
-        isHybrid:    form.isHybrid,
         engine_size: form.engineSize,
         image_url:   imageUrls[0],
         images:      imageUrls,
         features:    form.features.filter(f => f.trim() !== ''),
       })
   
-      // ← Bust the cache so home page shows the new car immediately
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.carsSale })
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.carsHire })
-  
       navigate('/')
     } catch (err) {
       setError(err.message || 'Failed to publish listing.')
